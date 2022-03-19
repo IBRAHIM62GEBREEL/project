@@ -16,6 +16,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            'Home',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ),
         body: FutureBuilder(
           future: _refreshProducts(context),
           builder: (ctx, snapshot) =>
@@ -28,21 +37,41 @@ class HomePage extends StatelessWidget {
                       child: Consumer<Courses>(
                         builder: (ctx, productsData, _) => Padding(
                           padding: const EdgeInsets.all(8),
-                          child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 2 / 3,
-                              crossAxisSpacing: 1,
-                              mainAxisSpacing: 1,
-                            ),
-                            padding: EdgeInsets.zero,
-                            itemCount: productsData.items.length,
-                            itemBuilder: (_, i) => CourseItem(
-                              id: productsData.items[i].id,
-                              name: productsData.items[i].name,
-                              imgUrl: productsData.items[i].imgUrl,
-                            ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  const SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'الأمراض',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GridView.builder(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 0.8,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    physics: const ClampingScrollPhysics(),
+                                    itemCount: productsData.items.length,
+                                    itemBuilder: (_, i) => CourseItem(
+                                      id: productsData.items[i].id,
+                                      name: productsData.items[i].name,
+                                      imgUrl: productsData.items[i].imgUrl,
+                                    ),
+                                  ),
+                                ]),
                           ),
                         ),
                       ),

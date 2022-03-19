@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Lecture with ChangeNotifier {
-  final String id;
+  final int id;
   final String name;
   final int level;
   final int category;

@@ -11,8 +11,8 @@ class Videos with ChangeNotifier {
     return [..._items];
   }
 
-  Future<void> fetchAndSetProducts(String id) async {
-    var url = Uri.parse('http://3.127.31.67/api/lecture/$id');
+  Future<void> fetchAndSetProducts(dynamic id) async {
+    var url = Uri.parse('http://3.127.31.67/api/lecture/${id.toString()}');
     // try {
     final response = await http.get(url);
     final extractedData = json.decode(response.body);

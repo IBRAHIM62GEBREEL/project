@@ -1,3 +1,4 @@
+import 'package:e_learning/widgets/video_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ class LectureVideo extends StatefulWidget {
 class _LectureVideoState extends State<LectureVideo> {
   bool isLoading = false;
   int? id;
+  int? index;
 
   @override
   void initState() {
@@ -39,31 +41,71 @@ class _LectureVideoState extends State<LectureVideo> {
 
   @override
   Widget build(BuildContext context) {
+    print('screen builede');
     return SafeArea(
       child: Scaffold(
-        body: FutureBuilder(
-          future: _refreshProducts(context),
-          builder: (ctx, snapshot) =>
-              snapshot.connectionState == ConnectionState.waiting
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : RefreshIndicator(
-                      onRefresh: () => _refreshProducts(context),
-                      child: Consumer<Videos>(
-                        builder: (ctx, productsData, _) => Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              children: const [
-                                SizedBox(
-                                  width: double.infinity,
-                                  // child: Text('${productsData.items[]}'),
-                                )
-                              ],
-                            )),
-                      ),
-                    ),
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_ios)),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          iconTheme: const IconThemeData(color: Colors.black),
+          title: const Text(
+            'Lecture Content',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
         ),
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator.adaptive(),
+              )
+            : FutureBuilder(
+                future: _refreshProducts(context),
+                builder: (ctx, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else {
+                      return RefreshIndicator(
+                        onRefresh: () => _refreshProducts(context),
+                        child: Consumer<Videos>(
+                          builder: (ctx, productsData, _) => Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: SingleChildScrollView(
+                              child: Column(children: [
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const ClampingScrollPhysics(),
+                                  padding: EdgeInsets.zero,
+                                  itemCount: productsData.items.length,
+                                  itemBuilder: (_, i) => VideoItem(
+                                    imgUrl: productsData.items[i].imgUrl ?? '',
+                                    index: productsData.items[i].index,
+                                    text: productsData.items[i].text,
+                                    videoUrl:
+                                        productsData.items[i].videoUrl ?? '',
+                                  ),
+                                ),
+                              ]),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                },
+              ),
       ),
     );
   }

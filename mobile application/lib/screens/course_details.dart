@@ -44,6 +44,21 @@ class _CourseDetailsState extends State<CourseDetails> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_ios)),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          iconTheme: const IconThemeData(color: Colors.black),
+          title: const Text(
+            'Lessons',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ),
         body: isLoading
             ? const Center(
                 child: CircularProgressIndicator.adaptive(),
@@ -58,21 +73,30 @@ class _CourseDetailsState extends State<CourseDetails> {
                         : RefreshIndicator(
                             onRefresh: () => _refreshProducts(context),
                             child: Consumer<Lectures>(
-                              builder: (ctx, productsData, _) => Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const ClampingScrollPhysics(),
-                                  padding: EdgeInsets.zero,
-                                  itemCount: productsData.items.length,
-                                  itemBuilder: (_, i) => Column(
-                                    children: [
-                                      LectureItem(
-                                        name: productsData.items[i].name,
-                                        id: productsData.items[i].id,
+                              builder: (ctx, productsData, _) => Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(4),
+                                child: SingleChildScrollView(
+                                  child: Column(children: [
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const ClampingScrollPhysics(),
+                                      padding: EdgeInsets.zero,
+                                      itemExtent: 100,
+                                      itemCount: productsData.items.length,
+                                      itemBuilder: (_, i) => Column(
+                                        children: [
+                                          LectureItem(
+                                            name: productsData.items[i].name,
+                                            id: productsData.items[i].id,
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ]),
                                 ),
                               ),
                             ),

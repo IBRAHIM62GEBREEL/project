@@ -27,7 +27,7 @@ class Lectures with ChangeNotifier {
     final List<Lecture> loadedProducts = [];
     extractedData.forEach((prodData) {
       loadedProducts.add(Lecture(
-          id: prodData['id'].toString(),
+          id: prodData['id'],
           name: prodData['name'],
           level: prodData['level'],
           category: prodData['category']));

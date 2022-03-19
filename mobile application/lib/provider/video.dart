@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Video with ChangeNotifier {
-  final String id;
-  final String index;
+  final int id;
+  final int index;
   final String text;
-  final String videoUrl;
-  final String imgUrl;
-  final String lecture;
+  final String? videoUrl;
+  final String? imgUrl;
+  final int lecture;
   Video(
       {required this.id,
       required this.imgUrl,
